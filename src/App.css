@@ -1,0 +1,5 @@
+/* https://www.blocknotejs.org/docs/styling-theming/overriding-css */
+
+.bn-block {
+  margin-bottom: 0.5rem;
+}
