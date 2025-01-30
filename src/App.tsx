@@ -7,28 +7,21 @@ import {
   BlockNoteSchema,
   defaultBlockSpecs,
   defaultInlineContentSpecs,
-  filterSuggestionItems,
-  insertOrUpdateBlock,
   PartialBlock,
 } from '@blocknote/core';
-import { BlockNoteView } from '@blocknote/mantine';
-import {
-  DefaultReactSuggestionItem,
-  getDefaultReactSlashMenuItems,
-  SuggestionMenuController,
-} from '@blocknote/react';
 import pretty from 'pretty';
 import { useEffect, useMemo, useState } from 'react';
-import { RiAlertFill } from 'react-icons/ri';
 import { Alert } from './components/Alert';
 import { Mention } from './components/Mention';
+import Editor from './Editor';
 import { getLocalState, setLocalState } from './localStorage';
+import Sidebar from './Sidebar';
 
 const LOCAL_STORAGE_EDITOR_STATE_KEY = 'stored-editor-state';
 
 // Our schema with block specs, which contain the configs and implementations for blocks
 // that we want our editor to use.
-const schema = BlockNoteSchema.create({
+export const schema = BlockNoteSchema.create({
   blockSpecs: {
     ...defaultBlockSpecs,
     alert: Alert,
@@ -39,56 +32,11 @@ const schema = BlockNoteSchema.create({
   },
 });
 
-// Slash menu item to insert an Alert block
-const insertAlert = (editor: typeof schema.BlockNoteEditor) => ({
-  title: 'Alert',
-  onItemClick: () => {
-    insertOrUpdateBlock(editor, {
-      type: 'alert',
-    });
-  },
-  aliases: [
-    'alert',
-    'notification',
-    'emphasize',
-    'warning',
-    'error',
-    'info',
-    'success',
-  ],
-  group: 'Other',
-  icon: <RiAlertFill />,
-});
-
-// Function which gets all users for the mentions menu.
-const getMentionMenuItems = (
-  editor: typeof schema.BlockNoteEditor,
-): DefaultReactSuggestionItem[] => {
-  const users = ['Steve', 'Bob', 'Joe', 'Mike'];
-
-  return users.map(user => ({
-    title: user,
-    onItemClick: () => {
-      editor.insertInlineContent([
-        {
-          type: 'mention',
-          props: {
-            user,
-          },
-        },
-        ' ', // add a space after the mention
-      ]);
-    },
-  }));
-};
-
 function App() {
   const [blocks, setBlocks] = useState<
     typeof schema.BlockNoteEditor.document
   >([]);
   const [html, setHTML] = useState<string>('');
-  const [jsonCollapsed, setJsonCollapsed] = useState(false);
-  const [htmlCollapsed, setHtmlCollapsed] = useState(false);
 
   const [initialContent, setInitialContent] = useState<
     PartialBlock[] | undefined | 'loading'
@@ -138,75 +86,11 @@ function App() {
           padding: '1rem',
         }}
       >
-        <h3
-          className={`section-header ${
-            jsonCollapsed ? 'collapsed' : ''
-          }`}
-          onClick={() => setJsonCollapsed(!jsonCollapsed)}
-        >
-          Document JSON:
-        </h3>
-        <div
-          className={`document-tree ${
-            jsonCollapsed ? 'collapsed' : ''
-          }`}
-        >
-          <pre>
-            <code>{JSON.stringify(blocks, null, 2)}</code>
-          </pre>
-        </div>
-        <h3
-          className={`section-header ${
-            htmlCollapsed ? 'collapsed' : ''
-          }`}
-          onClick={() => setHtmlCollapsed(!htmlCollapsed)}
-        >
-          Output HTML:
-        </h3>
-        <div
-          className={`document-tree ${
-            htmlCollapsed ? 'collapsed' : ''
-          }`}
-        >
-          <pre>
-            <code>{html}</code>
-          </pre>
-        </div>
+        <Sidebar blocks={blocks} html={html} />
       </div>
       <div style={{ flex: '1 1 50%', padding: '20px' }}>
         <div style={{ minHeight: '400px' }}>
-          <BlockNoteView
-            slashMenu={false}
-            editor={editor}
-            theme="light"
-            onChange={onChange}
-          >
-            {/* Replaces the default Slash Menu. */}
-            <SuggestionMenuController
-              triggerCharacter={'/'}
-              getItems={async query =>
-                // Gets all default slash menu items and `insertAlert` item.
-                filterSuggestionItems(
-                  [
-                    ...getDefaultReactSlashMenuItems(editor),
-                    insertAlert(editor),
-                  ],
-                  query,
-                )
-              }
-            />
-            {/* Adds a mentions menu which opens with the "@" key */}
-            <SuggestionMenuController
-              triggerCharacter={'@'}
-              getItems={async query =>
-                // Gets the mentions menu items
-                filterSuggestionItems(
-                  getMentionMenuItems(editor),
-                  query,
-                )
-              }
-            />
-          </BlockNoteView>
+          <Editor editor={editor} onChange={onChange} />
         </div>
       </div>
     </div>
