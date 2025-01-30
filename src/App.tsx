@@ -1,4 +1,10 @@
+import '@blocknote/core/fonts/inter.css';
+import { BlockNoteView } from '@blocknote/mantine';
+import '@blocknote/mantine/style.css';
+import { useCreateBlockNote } from '@blocknote/react';
+
 function App() {
+  const editor = useCreateBlockNote();
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
       <div
@@ -8,7 +14,9 @@ function App() {
           padding: '1rem',
         }}
       ></div>
-      <div style={{ flex: '1 1 80%', padding: '20px' }}></div>
+      <div style={{ flex: '1 1 80%', padding: '20px' }}>
+        <BlockNoteView editor={editor} />
+      </div>
     </div>
   );
 }
