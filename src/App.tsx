@@ -1,5 +1,6 @@
 import '@blocknote/core/fonts/inter.css';
 import '@blocknote/mantine/style.css';
+import './App.css';
 
 import { Block } from '@blocknote/core';
 import { BlockNoteView } from '@blocknote/mantine';
