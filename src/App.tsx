@@ -3,21 +3,22 @@ import '@blocknote/mantine/style.css';
 import './App.css';
 
 import {
+  BlockNoteEditor,
   BlockNoteSchema,
   defaultBlockSpecs,
   defaultInlineContentSpecs,
   filterSuggestionItems,
   insertOrUpdateBlock,
+  PartialBlock,
 } from '@blocknote/core';
 import { BlockNoteView } from '@blocknote/mantine';
 import {
   DefaultReactSuggestionItem,
   getDefaultReactSlashMenuItems,
   SuggestionMenuController,
-  useCreateBlockNote,
 } from '@blocknote/react';
 import pretty from 'pretty';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { RiAlertFill } from 'react-icons/ri';
 import { Alert } from './components/Alert';
 import { Mention } from './components/Mention';
@@ -89,17 +90,32 @@ function App() {
   const [jsonCollapsed, setJsonCollapsed] = useState(false);
   const [htmlCollapsed, setHtmlCollapsed] = useState(false);
 
-  const editor = useCreateBlockNote({
-    schema,
-    initialContent: getLocalState<any>(
-      LOCAL_STORAGE_EDITOR_STATE_KEY,
-    ),
-  });
+  const [initialContent, setInitialContent] = useState<
+    PartialBlock[] | undefined | 'loading'
+  >('loading');
+
+  // Loads the previously stored editor contents.
+  useEffect(() => {
+    setInitialContent(
+      getLocalState<PartialBlock[]>(LOCAL_STORAGE_EDITOR_STATE_KEY),
+    );
+  }, []);
+
+  // Creates a new editor instance.
+  // We use useMemo + createBlockNoteEditor instead of useCreateBlockNote so we
+  // can delay the creation of the editor until the initial content is loaded.
+  const editor = useMemo(() => {
+    if (initialContent === 'loading') {
+      return undefined;
+    }
+    return BlockNoteEditor.create({ schema, initialContent });
+  }, [initialContent]);
 
   // @ts-expect-error Testing
   window.editor = editor;
 
   const onChange = async () => {
+    if (editor === undefined) return;
     setLocalState(LOCAL_STORAGE_EDITOR_STATE_KEY, editor.document);
     setBlocks(editor.document);
     setHTML(pretty(await editor.blocksToHTMLLossy(editor.document)));
@@ -110,6 +126,8 @@ function App() {
     onChange();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (editor === undefined) return 'Loading content...';
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
