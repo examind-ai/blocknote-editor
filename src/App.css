@@ -5,7 +5,8 @@
 }
 
 .bn-block-content[data-content-type='paragraph'],
-.bn-block-content[data-content-type='heading'] {
+.bn-block-content[data-content-type='heading'],
+.bn-block-content[data-content-type='alert'] {
   margin-bottom: var(--bn-block-spacing);
 }
 

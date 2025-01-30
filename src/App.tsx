@@ -2,20 +2,67 @@ import '@blocknote/core/fonts/inter.css';
 import '@blocknote/mantine/style.css';
 import './App.css';
 
-import { Block } from '@blocknote/core';
+import {
+  BlockNoteSchema,
+  defaultBlockSpecs,
+  filterSuggestionItems,
+  insertOrUpdateBlock,
+} from '@blocknote/core';
 import { BlockNoteView } from '@blocknote/mantine';
-import { useCreateBlockNote } from '@blocknote/react';
+import {
+  getDefaultReactSlashMenuItems,
+  SuggestionMenuController,
+  useCreateBlockNote,
+} from '@blocknote/react';
 import pretty from 'pretty';
 import { useEffect, useState } from 'react';
 import { getLocalState, setLocalState } from './localStorage';
 
+import { RiAlertFill } from 'react-icons/ri';
+import { Alert } from './components/Alert';
+
+const LOCAL_STORAGE_EDITOR_STATE_KEY = 'stored-editor-state';
+
+// Our schema with block specs, which contain the configs and implementations for blocks
+// that we want our editor to use.
+const schema = BlockNoteSchema.create({
+  blockSpecs: {
+    ...defaultBlockSpecs,
+    alert: Alert,
+  },
+});
+
+// Slash menu item to insert an Alert block
+const insertAlert = (editor: typeof schema.BlockNoteEditor) => ({
+  title: 'Alert',
+  onItemClick: () => {
+    insertOrUpdateBlock(editor, {
+      type: 'alert',
+    });
+  },
+  aliases: [
+    'alert',
+    'notification',
+    'emphasize',
+    'warning',
+    'error',
+    'info',
+    'success',
+  ],
+  group: 'Other',
+  icon: <RiAlertFill />,
+});
+
 function App() {
-  const [blocks, setBlocks] = useState<Block[]>([]);
+  const [blocks, setBlocks] = useState<
+    typeof schema.BlockNoteEditor.document
+  >([]);
   const [html, setHTML] = useState<string>('');
   const [jsonCollapsed, setJsonCollapsed] = useState(false);
   const [htmlCollapsed, setHtmlCollapsed] = useState(false);
 
   const editor = useCreateBlockNote({
+    schema,
     initialContent: getLocalState<any>(
       LOCAL_STORAGE_EDITOR_STATE_KEY,
     ),
@@ -83,10 +130,26 @@ function App() {
       <div style={{ flex: '1 1 50%', padding: '20px' }}>
         <div style={{ minHeight: '400px' }}>
           <BlockNoteView
+            slashMenu={false}
             editor={editor}
             theme="light"
             onChange={onChange}
-          />
+          >
+            {/* Replaces the default Slash Menu. */}
+            <SuggestionMenuController
+              triggerCharacter={'/'}
+              getItems={async query =>
+                // Gets all default slash menu items and `insertAlert` item.
+                filterSuggestionItems(
+                  [
+                    ...getDefaultReactSlashMenuItems(editor),
+                    insertAlert(editor),
+                  ],
+                  query,
+                )
+              }
+            />
+          </BlockNoteView>
         </div>
       </div>
     </div>
