@@ -88,7 +88,9 @@ function App() {
       >
         <Sidebar blocks={blocks} html={html} />
       </div>
-      <div style={{ flex: '1 1 50%', padding: '20px' }}>
+      <div
+        style={{ flex: '1 1 50%', padding: '20px', maxWidth: '50%' }}
+      >
         <div style={{ minHeight: '400px' }}>
           <Editor editor={editor} onChange={onChange} />
         </div>
