@@ -1,5 +1,26 @@
 /* https://www.blocknotejs.org/docs/styling-theming/overriding-css */
 
-.bn-block {
-  margin-bottom: 0.5rem;
+:root {
+  --bn-block-spacing: 1rem;
+}
+
+.bn-block-content[data-content-type='paragraph'],
+.bn-block-content[data-content-type='heading'] {
+  margin-bottom: var(--bn-block-spacing);
+}
+
+/* Last item in a numbered or bullet list gets margin */
+.bn-block-outer:has(
+    .bn-block-content[data-content-type='numberedListItem'],
+    .bn-block-content[data-content-type='bulletListItem']
+  ):not(
+    :has(
+      + .bn-block-outer
+        .bn-block-content[data-content-type='numberedListItem'],
+      + .bn-block-outer
+        .bn-block-content[data-content-type='bulletListItem']
+    )
+  )
+  .bn-block-content {
+  margin-bottom: var(--bn-block-spacing);
 }
