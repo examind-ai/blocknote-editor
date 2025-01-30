@@ -15,7 +15,7 @@ function App() {
         }}
       ></div>
       <div style={{ flex: '1 1 80%', padding: '20px' }}>
-        <BlockNoteView editor={editor} />
+        <BlockNoteView editor={editor} theme="light" />
       </div>
     </div>
   );
