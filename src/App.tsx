@@ -1,15 +1,20 @@
 import { Block } from '@blocknote/core';
-import '@blocknote/core/fonts/inter.css';
 import { BlockNoteView } from '@blocknote/mantine';
-import '@blocknote/mantine/style.css';
 import { useCreateBlockNote } from '@blocknote/react';
 import { useEffect, useState } from 'react';
+import '@blocknote/core/fonts/inter.css';
+import '@blocknote/mantine/style.css';
 
 function App() {
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [html, setHTML] = useState<string>('');
+  const [jsonCollapsed, setJsonCollapsed] = useState(false);
+  const [htmlCollapsed, setHtmlCollapsed] = useState(false);
 
   const editor = useCreateBlockNote();
+
+  // @ts-expect-error Testing
+  window.editor = editor;
 
   const onChange = async () => {
     setBlocks(editor.document);
@@ -31,14 +36,36 @@ function App() {
           padding: '1rem',
         }}
       >
-        <h3>Document JSON:</h3>
-        <div className="document-tree">
+        <h3
+          className={`section-header ${
+            jsonCollapsed ? 'collapsed' : ''
+          }`}
+          onClick={() => setJsonCollapsed(!jsonCollapsed)}
+        >
+          Document JSON:
+        </h3>
+        <div
+          className={`document-tree ${
+            jsonCollapsed ? 'collapsed' : ''
+          }`}
+        >
           <pre>
             <code>{JSON.stringify(blocks, null, 2)}</code>
           </pre>
         </div>
-        <h3>Output HTML:</h3>
-        <div className="document-tree">
+        <h3
+          className={`section-header ${
+            htmlCollapsed ? 'collapsed' : ''
+          }`}
+          onClick={() => setHtmlCollapsed(!htmlCollapsed)}
+        >
+          Output HTML:
+        </h3>
+        <div
+          className={`document-tree ${
+            htmlCollapsed ? 'collapsed' : ''
+          }`}
+        >
           <pre>
             <code>{html}</code>
           </pre>
