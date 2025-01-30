@@ -18,6 +18,29 @@ body {
   overflow: hidden;
   border: 1px solid gray;
   font-size: small;
+  transition: height 0.3s ease-in-out;
+}
+
+.document-tree.collapsed {
+  height: 0;
+}
+
+.section-header {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-header::before {
+  content: '▼';
+  font-size: 0.8em;
+  transition: transform 0.3s ease;
+}
+
+.section-header.collapsed::before {
+  transform: rotate(-90deg);
 }
 
 .document-tree pre {
