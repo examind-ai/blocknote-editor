@@ -26,19 +26,11 @@ function App() {
     <div style={{ display: 'flex', minHeight: '100vh' }}>
       <div
         style={{
-          flex: '1 1 20%',
+          flex: '1 1 50%',
           borderRight: '1px solid #ddd',
           padding: '1rem',
         }}
-      ></div>
-      <div style={{ flex: '1 1 80%', padding: '20px' }}>
-        <div style={{ minHeight: '400px' }}>
-          <BlockNoteView
-            editor={editor}
-            theme="light"
-            onChange={onChange}
-          />
-        </div>
+      >
         <h3>Document JSON:</h3>
         <div className="document-tree">
           <pre>
@@ -50,6 +42,15 @@ function App() {
           <pre>
             <code>{html}</code>
           </pre>
+        </div>
+      </div>
+      <div style={{ flex: '1 1 50%', padding: '20px' }}>
+        <div style={{ minHeight: '400px' }}>
+          <BlockNoteView
+            editor={editor}
+            theme="light"
+            onChange={onChange}
+          />
         </div>
       </div>
     </div>
