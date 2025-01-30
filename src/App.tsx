@@ -1,9 +1,9 @@
 import { Block } from '@blocknote/core';
+import '@blocknote/core/fonts/inter.css';
 import { BlockNoteView } from '@blocknote/mantine';
+import '@blocknote/mantine/style.css';
 import { useCreateBlockNote } from '@blocknote/react';
 import { useEffect, useState } from 'react';
-import '@blocknote/core/fonts/inter.css';
-import '@blocknote/mantine/style.css';
 
 function App() {
   const [blocks, setBlocks] = useState<Block[]>([]);
