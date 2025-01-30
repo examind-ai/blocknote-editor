@@ -4,6 +4,7 @@ import '@blocknote/mantine/style.css';
 import { Block } from '@blocknote/core';
 import { BlockNoteView } from '@blocknote/mantine';
 import { useCreateBlockNote } from '@blocknote/react';
+import pretty from 'pretty';
 import { useEffect, useState } from 'react';
 
 function App() {
@@ -19,7 +20,7 @@ function App() {
 
   const onChange = async () => {
     setBlocks(editor.document);
-    setHTML(await editor.blocksToHTMLLossy(editor.document));
+    setHTML(pretty(await editor.blocksToHTMLLossy(editor.document)));
   };
 
   useEffect(() => {
