@@ -10,3 +10,22 @@ body {
   font-size: 16px;
   color: #333;
 }
+
+
+.document-tree {
+  border-radius: 0.5rem;
+  flex: 1;
+  overflow: hidden;
+  border: 1px solid gray;
+  font-size: small;
+}
+
+.document-tree pre {
+  border-radius: 0.5rem;
+  height: 100%;
+  overflow: auto;
+  padding-block: 1rem;
+  padding-inline: 24px;
+  width: 100%;
+  white-space: pre-wrap;
+}
