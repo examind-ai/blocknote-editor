@@ -5,21 +5,23 @@ import './App.css';
 import {
   BlockNoteSchema,
   defaultBlockSpecs,
+  defaultInlineContentSpecs,
   filterSuggestionItems,
   insertOrUpdateBlock,
 } from '@blocknote/core';
 import { BlockNoteView } from '@blocknote/mantine';
 import {
+  DefaultReactSuggestionItem,
   getDefaultReactSlashMenuItems,
   SuggestionMenuController,
   useCreateBlockNote,
 } from '@blocknote/react';
 import pretty from 'pretty';
 import { useEffect, useState } from 'react';
-import { getLocalState, setLocalState } from './localStorage';
-
 import { RiAlertFill } from 'react-icons/ri';
 import { Alert } from './components/Alert';
+import { Mention } from './components/Mention';
+import { getLocalState, setLocalState } from './localStorage';
 
 const LOCAL_STORAGE_EDITOR_STATE_KEY = 'stored-editor-state';
 
@@ -29,6 +31,10 @@ const schema = BlockNoteSchema.create({
   blockSpecs: {
     ...defaultBlockSpecs,
     alert: Alert,
+  },
+  inlineContentSpecs: {
+    ...defaultInlineContentSpecs,
+    mention: Mention,
   },
 });
 
@@ -52,6 +58,28 @@ const insertAlert = (editor: typeof schema.BlockNoteEditor) => ({
   group: 'Other',
   icon: <RiAlertFill />,
 });
+
+// Function which gets all users for the mentions menu.
+const getMentionMenuItems = (
+  editor: typeof schema.BlockNoteEditor,
+): DefaultReactSuggestionItem[] => {
+  const users = ['Steve', 'Bob', 'Joe', 'Mike'];
+
+  return users.map(user => ({
+    title: user,
+    onItemClick: () => {
+      editor.insertInlineContent([
+        {
+          type: 'mention',
+          props: {
+            user,
+          },
+        },
+        ' ', // add a space after the mention
+      ]);
+    },
+  }));
+};
 
 function App() {
   const [blocks, setBlocks] = useState<
@@ -145,6 +173,17 @@ function App() {
                     ...getDefaultReactSlashMenuItems(editor),
                     insertAlert(editor),
                   ],
+                  query,
+                )
+              }
+            />
+            {/* Adds a mentions menu which opens with the "@" key */}
+            <SuggestionMenuController
+              triggerCharacter={'@'}
+              getItems={async query =>
+                // Gets the mentions menu items
+                filterSuggestionItems(
+                  getMentionMenuItems(editor),
                   query,
                 )
               }
