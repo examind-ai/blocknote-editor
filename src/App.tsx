@@ -7,6 +7,7 @@ import { BlockNoteView } from '@blocknote/mantine';
 import { useCreateBlockNote } from '@blocknote/react';
 import pretty from 'pretty';
 import { useEffect, useState } from 'react';
+import { getLocalState, setLocalState } from './localStorage';
 
 function App() {
   const [blocks, setBlocks] = useState<Block[]>([]);
@@ -14,12 +15,17 @@ function App() {
   const [jsonCollapsed, setJsonCollapsed] = useState(false);
   const [htmlCollapsed, setHtmlCollapsed] = useState(false);
 
-  const editor = useCreateBlockNote();
+  const editor = useCreateBlockNote({
+    initialContent: getLocalState<any>(
+      LOCAL_STORAGE_EDITOR_STATE_KEY,
+    ),
+  });
 
   // @ts-expect-error Testing
   window.editor = editor;
 
   const onChange = async () => {
+    setLocalState(LOCAL_STORAGE_EDITOR_STATE_KEY, editor.document);
     setBlocks(editor.document);
     setHTML(pretty(await editor.blocksToHTMLLossy(editor.document)));
   };
