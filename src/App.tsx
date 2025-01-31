@@ -13,6 +13,7 @@ import pretty from 'pretty';
 import { useEffect, useMemo, useState } from 'react';
 import { Alert } from './components/Alert';
 import { Mention } from './components/Mention';
+import { MultipleChoice } from './components/MultipleChoice';
 import Editor from './Editor';
 import { getLocalState, setLocalState } from './localStorage';
 import Sidebar from './Sidebar';
@@ -25,6 +26,7 @@ export const schema = BlockNoteSchema.create({
   blockSpecs: {
     ...defaultBlockSpecs,
     alert: Alert,
+    multipleChoice: MultipleChoice,
   },
   inlineContentSpecs: {
     ...defaultInlineContentSpecs,
