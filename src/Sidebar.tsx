@@ -5,7 +5,7 @@ function Sidebar({
   blocks,
   html,
 }: {
-  blocks: typeof schema.BlockNoteEditor.document;
+  blocks: (typeof schema.PartialBlock)[];
   html: string;
 }) {
   const [jsonCollapsed, setJsonCollapsed] = useState(false);
