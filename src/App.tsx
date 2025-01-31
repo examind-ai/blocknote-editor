@@ -34,7 +34,7 @@ export const schema = BlockNoteSchema.create({
 
 function App() {
   const [blocks, setBlocks] = useState<
-    typeof schema.BlockNoteEditor.document
+    (typeof schema.PartialBlock)[]
   >([]);
   const [html, setHTML] = useState<string>('');
 
