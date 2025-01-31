@@ -3,6 +3,8 @@ import { ActionIcon, Button, Radio, TextInput } from '@mantine/core';
 import { MdAdd, MdDelete } from 'react-icons/md';
 import './index.css';
 
+// Asked on Discord how I can build a complex block like this: https://discord.com/channels/928190961455087667/1335029745535942667/1335029745535942667
+
 type Option = {
   id: string;
   content: string;
