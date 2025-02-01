@@ -58,25 +58,27 @@ const insertMultipleChoice = (
 const insertMultipleAnswer = (
   editor: typeof schema.BlockNoteEditor,
 ) => ({
+  key: 'multipleAnswer',
   title: 'Multiple Answer',
+  subtext: 'Question with multiple correct answers',
+  aliases: ['multipleAnswer'],
+  group: 'Question Type',
+  icon: <RiCheckboxMultipleFill />,
   onItemClick: () => {
     insertOrUpdateBlock(editor, {
       type: 'multipleAnswer',
       props: {
-        // Initialize with a default option
-        options: JSON.stringify([
-          {
-            id: crypto.randomUUID(),
-            text: 'Option 1',
-            correct: false,
-          },
-        ]),
+        textColor: 'default',
       },
+      content: [
+        {
+          type: 'text',
+          text: 'Option 1',
+          styles: {},
+        },
+      ],
     });
   },
-  aliases: ['multipleAnswer'],
-  group: 'Question Type',
-  icon: <RiCheckboxMultipleFill />,
 });
 
 // Function which gets all users for the mentions menu.
@@ -109,6 +111,8 @@ function Editor({
   onChange: () => void;
 }) {
   if (editor === undefined) return 'Loading content...';
+
+  console.log(getDefaultReactSlashMenuItems(editor));
 
   return (
     <BlockNoteView
