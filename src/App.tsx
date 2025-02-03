@@ -2,8 +2,22 @@ import '@blocknote/core/fonts/inter.css';
 import '@blocknote/mantine/style.css';
 import './App.css';
 
-import { PartialBlock } from '@blocknote/core';
-import { BlockNoteView, useCreateBlockNote } from '@blocknote/react';
+import {
+  BlockNoteSchema,
+  defaultStyleSpecs,
+  PartialBlock,
+} from '@blocknote/core';
+import {
+  BlockNoteView,
+  FormattingToolbar,
+  FormattingToolbarController,
+  useCreateBlockNote,
+} from '@blocknote/react';
+import {
+  commentStyleSpec,
+  CommentToolbarController,
+  CreateCommentButton,
+} from '@defensestation/blocknote-comments';
 import pretty from 'pretty';
 import { useEffect, useState } from 'react';
 import { setLocalState } from './localStorage';
@@ -14,11 +28,29 @@ const LOCAL_STORAGE_EDITOR_STATE_KEY = 'stored-editor-state';
 // Our schema with block specs, which contain the configs and implementations for blocks
 // that we want our editor to use.
 
+const schema = BlockNoteSchema.create({
+  styleSpecs: {
+    // Adds all default styles.
+    ...defaultStyleSpecs,
+    comment: commentStyleSpec,
+  },
+});
+
+const CustomToolbar = () => (
+  <FormattingToolbarController
+    formattingToolbar={() => (
+      <FormattingToolbar>
+        <CreateCommentButton key={'createCommentButtin'} />
+      </FormattingToolbar>
+    )}
+  />
+);
+
 function App() {
   const [blocks, setBlocks] = useState<PartialBlock[]>([]);
   const [html, setHTML] = useState<string>('');
 
-  const editor = useCreateBlockNote();
+  const editor = useCreateBlockNote({ schema });
 
   // @ts-expect-error Testing
   window.editor = editor;
@@ -57,7 +89,11 @@ function App() {
             editor={editor}
             onChange={onChange}
             theme="light"
-          />
+            formattingToolbar={false}
+          >
+            <CustomToolbar />
+            <CommentToolbarController />
+          </BlockNoteView>
         </div>
       </div>
     </div>
