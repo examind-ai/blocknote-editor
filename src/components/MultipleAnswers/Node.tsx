@@ -5,7 +5,7 @@ import MultipleAnswersNodeView from './NodeView';
 
 const MultipleAnswersNode = Node.create({
   name: 'multipleAnswers',
-  group: 'block',
+  group: 'bnBlock', // <-- Set the group to 'bnBlock'
   content: 'multipleOption+', // One or more options
   isolating: true,
 
