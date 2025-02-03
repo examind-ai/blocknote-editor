@@ -6,6 +6,7 @@ import {
 } from '@blocknote/react';
 import { insertAlert } from './components/Alert/insertAlert';
 import { getMentionMenuItems } from './components/Mention/getMentionMenuItem';
+import { insertMultipleAnswers } from './components/MultipleAnswers';
 import { insertMultipleChoice } from './components/MultipleChoice/insertMultipleChoice';
 import { schema } from './schema';
 
@@ -34,6 +35,7 @@ function Editor({
               ...getDefaultReactSlashMenuItems(editor),
               insertAlert(editor),
               insertMultipleChoice(editor),
+              insertMultipleAnswers(editor),
             ],
             query,
           )
