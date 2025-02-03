@@ -2,37 +2,15 @@ import '@blocknote/core/fonts/inter.css';
 import '@blocknote/mantine/style.css';
 import './App.css';
 
-import {
-  BlockNoteEditor,
-  BlockNoteSchema,
-  defaultBlockSpecs,
-  defaultInlineContentSpecs,
-  PartialBlock,
-} from '@blocknote/core';
+import { BlockNoteEditor, PartialBlock } from '@blocknote/core';
 import pretty from 'pretty';
 import { useEffect, useMemo, useState } from 'react';
-import { Alert } from './components/Alert';
-import { Mention } from './components/Mention';
-import { MultipleChoice } from './components/MultipleChoice';
 import Editor from './Editor';
 import { getLocalState, setLocalState } from './localStorage';
+import { schema } from './schema';
 import Sidebar from './Sidebar';
 
 const LOCAL_STORAGE_EDITOR_STATE_KEY = 'stored-editor-state';
-
-// Our schema with block specs, which contain the configs and implementations for blocks
-// that we want our editor to use.
-export const schema = BlockNoteSchema.create({
-  blockSpecs: {
-    ...defaultBlockSpecs,
-    alert: Alert,
-    multipleChoice: MultipleChoice,
-  },
-  inlineContentSpecs: {
-    ...defaultInlineContentSpecs,
-    mention: Mention,
-  },
-});
 
 function App() {
   const [blocks, setBlocks] = useState<

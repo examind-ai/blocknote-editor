@@ -4,10 +4,11 @@ import {
   getDefaultReactSlashMenuItems,
   SuggestionMenuController,
 } from '@blocknote/react';
-import { schema } from './App';
 import { insertAlert } from './components/Alert/insertAlert';
 import { getMentionMenuItems } from './components/Mention/getMentionMenuItem';
+import { insertMultipleAnswers } from './components/MultipleAnswers';
 import { insertMultipleChoice } from './components/MultipleChoice/insertMultipleChoice';
+import { schema } from './schema';
 
 function Editor({
   editor,
@@ -34,6 +35,7 @@ function Editor({
               ...getDefaultReactSlashMenuItems(editor),
               insertAlert(editor),
               insertMultipleChoice(editor),
+              insertMultipleAnswers(editor),
             ],
             query,
           )
