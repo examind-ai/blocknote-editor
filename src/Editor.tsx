@@ -12,11 +12,7 @@ import {
   getDefaultReactSlashMenuItems,
   SuggestionMenuController,
 } from '@blocknote/react';
-import {
-  RiAlertFill,
-  RiCheckboxMultipleFill,
-  RiCheckboxMultipleLine,
-} from 'react-icons/ri';
+import { RiAlertFill, RiCheckboxMultipleLine } from 'react-icons/ri';
 import { schema } from './App';
 
 // Slash menu item to insert an Alert block
@@ -53,32 +49,6 @@ const insertMultipleChoice = (
   aliases: ['multipleChoice'],
   group: 'Question Type',
   icon: <RiCheckboxMultipleLine />,
-});
-
-const insertMultipleAnswer = (
-  editor: typeof schema.BlockNoteEditor,
-) => ({
-  key: 'multipleAnswer',
-  title: 'Multiple Answer',
-  subtext: 'Question with multiple correct answers',
-  aliases: ['multipleAnswer'],
-  group: 'Question Type',
-  icon: <RiCheckboxMultipleFill />,
-  onItemClick: () => {
-    insertOrUpdateBlock(editor, {
-      type: 'multipleAnswer',
-      props: {
-        textColor: 'default',
-      },
-      content: [
-        {
-          type: 'text',
-          text: 'Option 1',
-          styles: {},
-        },
-      ],
-    });
-  },
 });
 
 // Function which gets all users for the mentions menu.
@@ -130,7 +100,6 @@ function Editor({
               ...getDefaultReactSlashMenuItems(editor),
               insertAlert(editor),
               insertMultipleChoice(editor),
-              insertMultipleAnswer(editor),
             ],
             query,
           )
