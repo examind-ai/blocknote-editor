@@ -4,13 +4,17 @@ import './App.css';
 
 import {
   BlockNoteSchema,
+  defaultBlockSpecs,
   defaultStyleSpecs,
+  filterSuggestionItems,
   PartialBlock,
 } from '@blocknote/core';
 import {
   BlockNoteView,
   FormattingToolbar,
   FormattingToolbarController,
+  getDefaultReactSlashMenuItems,
+  SuggestionMenuController,
   useCreateBlockNote,
 } from '@blocknote/react';
 import {
@@ -18,6 +22,10 @@ import {
   CommentToolbarController,
   CreateCommentButton,
 } from '@defensestation/blocknote-comments';
+import {
+  insertMermaid,
+  MermaidBlock,
+} from '@defensestation/blocknote-mermaid';
 import pretty from 'pretty';
 import { useEffect, useState } from 'react';
 import { setLocalState } from './localStorage';
@@ -29,6 +37,10 @@ const LOCAL_STORAGE_EDITOR_STATE_KEY = 'stored-editor-state';
 // that we want our editor to use.
 
 const schema = BlockNoteSchema.create({
+  blockSpecs: {
+    ...defaultBlockSpecs,
+    mermaid: MermaidBlock,
+  },
   styleSpecs: {
     // Adds all default styles.
     ...defaultStyleSpecs,
@@ -90,9 +102,22 @@ function App() {
             onChange={onChange}
             theme="light"
             formattingToolbar={false}
+            slashMenu={false}
           >
             <CustomToolbar />
             <CommentToolbarController />
+            <SuggestionMenuController
+              triggerCharacter={'/'}
+              getItems={async query =>
+                filterSuggestionItems(
+                  [
+                    ...getDefaultReactSlashMenuItems(editor),
+                    insertMermaid(),
+                  ],
+                  query,
+                )
+              }
+            />
           </BlockNoteView>
         </div>
       </div>
