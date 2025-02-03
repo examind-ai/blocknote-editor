@@ -2,11 +2,11 @@ import '@blocknote/core/fonts/inter.css';
 import '@blocknote/mantine/style.css';
 import './App.css';
 
-import { BlockNoteEditor, PartialBlock } from '@blocknote/core';
+import { PartialBlock } from '@blocknote/core';
+import { BlockNoteView, useCreateBlockNote } from '@blocknote/react';
 import pretty from 'pretty';
-import { useEffect, useMemo, useState } from 'react';
-import Editor from './Editor';
-import { getLocalState, setLocalState } from './localStorage';
+import { useEffect, useState } from 'react';
+import { setLocalState } from './localStorage';
 import Sidebar from './Sidebar';
 
 const LOCAL_STORAGE_EDITOR_STATE_KEY = 'stored-editor-state';
@@ -18,26 +18,7 @@ function App() {
   const [blocks, setBlocks] = useState<PartialBlock[]>([]);
   const [html, setHTML] = useState<string>('');
 
-  const [initialContent, setInitialContent] = useState<
-    PartialBlock[] | undefined | 'loading'
-  >('loading');
-
-  // Loads the previously stored editor contents.
-  useEffect(() => {
-    setInitialContent(
-      getLocalState<PartialBlock[]>(LOCAL_STORAGE_EDITOR_STATE_KEY),
-    );
-  }, []);
-
-  // Creates a new editor instance.
-  // We use useMemo + createBlockNoteEditor instead of useCreateBlockNote so we
-  // can delay the creation of the editor until the initial content is loaded.
-  const editor = useMemo(() => {
-    if (initialContent === 'loading') {
-      return undefined;
-    }
-    return BlockNoteEditor.create();
-  }, [initialContent]);
+  const editor = useCreateBlockNote();
 
   // @ts-expect-error Testing
   window.editor = editor;
@@ -72,7 +53,11 @@ function App() {
         style={{ flex: '1 1 50%', padding: '20px', maxWidth: '50%' }}
       >
         <div style={{ minHeight: '400px' }}>
-          <Editor editor={editor} onChange={onChange} />
+          <BlockNoteView
+            editor={editor}
+            onChange={onChange}
+            theme="light"
+          />
         </div>
       </div>
     </div>
