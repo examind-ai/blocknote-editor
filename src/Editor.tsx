@@ -14,6 +14,7 @@ import {
 } from '@blocknote/react';
 import { RiAlertFill, RiCheckboxMultipleLine } from 'react-icons/ri';
 import { schema } from './App';
+import { insertMultipleAnswers } from './components/MultipleAnswers';
 
 // Slash menu item to insert an Alert block
 const insertAlert = (editor: typeof schema.BlockNoteEditor) => ({
@@ -100,6 +101,7 @@ function Editor({
               ...getDefaultReactSlashMenuItems(editor),
               insertAlert(editor),
               insertMultipleChoice(editor),
+              insertMultipleAnswers(editor),
             ],
             query,
           )
