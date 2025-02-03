@@ -13,7 +13,7 @@ import {
   SuggestionMenuController,
 } from '@blocknote/react';
 import { RiAlertFill, RiCheckboxMultipleLine } from 'react-icons/ri';
-import { schema } from './App';
+import { schema } from './schema';
 import { insertMultipleAnswers } from './components/MultipleAnswers';
 
 // Slash menu item to insert an Alert block
