@@ -9,7 +9,16 @@ export const insertMultipleAnswers = (
   onItemClick: () => {
     insertOrUpdateBlock(editor, {
       type: 'multipleAnswers',
-      // Optionally you can provide initial content here.
+      content: [
+        {
+          type: 'multipleOption',
+          content: 'Option 1', // Plain string inline content
+        },
+        {
+          type: 'multipleOption',
+          content: 'Option 2', // Plain string inline content
+        },
+      ],
     });
   },
   aliases: ['multiple answers'],

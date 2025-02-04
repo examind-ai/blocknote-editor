@@ -7,6 +7,7 @@ import { Alert } from '../components/Alert';
 import { Mention } from '../components/Mention';
 import { MultipleAnswersBlock } from '../components/MultipleAnswers';
 import { MultipleChoice } from '../components/MultipleChoice';
+import MultipleOptionBlock from '../components/MultipleOption/Block';
 
 // Our schema with block specs, which contain the configs and implementations for blocks
 // that we want our editor to use.
@@ -20,5 +21,6 @@ export const schema = BlockNoteSchema.create({
   inlineContentSpecs: {
     ...defaultInlineContentSpecs,
     mention: Mention,
+    multipleOption: MultipleOptionBlock,
   },
 });
