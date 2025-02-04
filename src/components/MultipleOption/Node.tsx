@@ -1,12 +1,13 @@
-// MultipleOption.ts
 import { Node, mergeAttributes } from '@tiptap/core';
 import { ReactNodeViewRenderer } from '@tiptap/react';
 import MultipleOptionNodeView from './NodeView';
 
-const MultipleOptionNode = Node.create({
+export const MultipleOption = Node.create({
   name: 'multipleOption',
+  // We use group "block" because these nodes are block‐level nodes (they are children of a container)
   group: 'block',
-  content: 'inline*', // Allows rich text with inline content (mentions, formatting, etc.)
+  // Allow inline content (e.g. plain strings or styled text) within each option
+  content: 'inline*',
   inline: false,
   isolating: true,
 
@@ -24,11 +25,7 @@ const MultipleOptionNode = Node.create({
   },
 
   parseHTML() {
-    return [
-      {
-        tag: 'div[data-mc-option]', // reusing this selector name for consistency
-      },
-    ];
+    return [{ tag: 'div[data-mc-option]' }];
   },
 
   renderHTML({ HTMLAttributes }) {
@@ -44,4 +41,4 @@ const MultipleOptionNode = Node.create({
   },
 });
 
-export default MultipleOptionNode;
+export default MultipleOption;

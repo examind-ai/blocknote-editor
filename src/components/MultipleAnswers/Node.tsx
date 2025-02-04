@@ -1,20 +1,17 @@
-// MultipleAnswers.ts
 import { Node, mergeAttributes } from '@tiptap/core';
 import { ReactNodeViewRenderer } from '@tiptap/react';
 import MultipleAnswersNodeView from './NodeView';
 
-const MultipleAnswersNode = Node.create({
+export const MultipleAnswers = Node.create({
   name: 'multipleAnswers',
-  group: 'bnBlock', // <-- Set the group to 'bnBlock'
-  content: 'multipleOption+', // One or more options
+  // Choose a group that makes sense for a container – here we use "bnBlock"
+  group: 'bnBlock',
+  // Expect one or more multipleOption children
+  content: 'multipleOption+',
   isolating: true,
 
   parseHTML() {
-    return [
-      {
-        tag: 'div[data-multiple-answers]',
-      },
-    ];
+    return [{ tag: 'div[data-multiple-answers]' }];
   },
 
   renderHTML({ HTMLAttributes }) {
@@ -32,4 +29,4 @@ const MultipleAnswersNode = Node.create({
   },
 });
 
-export default MultipleAnswersNode;
+export default MultipleAnswers;

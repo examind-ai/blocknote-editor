@@ -12,11 +12,11 @@ export const insertMultipleAnswers = (
       content: [
         {
           type: 'multipleOption',
-          content: 'Option 1', // Plain string inline content
+          content: 'Option 1', // plain string inline content
         },
         {
           type: 'multipleOption',
-          content: 'Option 2', // Plain string inline content
+          content: 'Option 2',
         },
       ],
     });

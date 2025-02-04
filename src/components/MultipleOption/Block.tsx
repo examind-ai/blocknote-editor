@@ -1,11 +1,7 @@
-// MultipleOptionBlock.ts
 import { createBlockSpecFromStronglyTypedTiptapNode } from '@blocknote/core';
-import MultipleOptionNode from './Node';
+import MultipleOption from './Node';
 
-const MultipleOptionBlock =
-  createBlockSpecFromStronglyTypedTiptapNode(
-    MultipleOptionNode,
-    {}, // You can pass a prop schema here if needed
-  );
-
-export default MultipleOptionBlock;
+export default createBlockSpecFromStronglyTypedTiptapNode(
+  MultipleOption,
+  {}, // No extra props needed in this example
+);

@@ -1,17 +1,9 @@
-// MultipleAnswersBlock.ts
 import { createBlockSpecFromStronglyTypedTiptapNode } from '@blocknote/core';
-import MultipleOptionNode from '../MultipleOption/Node';
-import MultipleAnswersNode from './Node';
+import MultipleAnswers from './Node';
+import MultipleOption from '../MultipleOption/Node';
 
-// In this simple example we don’t need extra props, so we pass an empty prop schema.
-const MultipleAnswersBlock =
-  createBlockSpecFromStronglyTypedTiptapNode(
-    MultipleAnswersNode,
-    {}, // (or you can define a propSchema if needed)
-    [
-      // Register additional TipTap nodes used by the block.
-      MultipleOptionNode,
-    ],
-  );
-
-export default MultipleAnswersBlock;
+export default createBlockSpecFromStronglyTypedTiptapNode(
+  MultipleAnswers,
+  {}, // No extra props for now
+  [MultipleOption], // Register the child node so BlockNote knows about it
+);

@@ -1,10 +1,9 @@
-// MultipleOptionNodeView.tsx
+import React from 'react';
 import {
+  NodeViewWrapper,
   NodeViewContent,
   NodeViewProps,
-  NodeViewWrapper,
 } from '@tiptap/react';
-import React from 'react';
 
 const MultipleOptionNodeView: React.FC<NodeViewProps> = props => {
   const { node, updateAttributes, editor } = props;
@@ -14,8 +13,7 @@ const MultipleOptionNodeView: React.FC<NodeViewProps> = props => {
   };
 
   const deleteOption = () => {
-    // The deleteNode command expects a node type or name.
-    // Here we pass the node's type directly.
+    // Deletes this option node.
     editor.commands.deleteNode(node.type);
   };
 
@@ -26,7 +24,7 @@ const MultipleOptionNodeView: React.FC<NodeViewProps> = props => {
         checked={node.attrs.correct}
         onChange={toggleCorrect}
       />
-      {/* Renders the rich text content */}
+      {/* Renders the inline content of this option */}
       <NodeViewContent as="div" className="multiple-option-content" />
       <button onClick={deleteOption} style={{ marginLeft: '8px' }}>
         Delete
