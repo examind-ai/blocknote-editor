@@ -1,73 +1,13 @@
-import {
-  filterSuggestionItems,
-  insertOrUpdateBlock,
-} from '@blocknote/core';
+import { filterSuggestionItems } from '@blocknote/core';
 import { BlockNoteView } from '@blocknote/mantine';
 import {
-  DefaultReactSuggestionItem,
   getDefaultReactSlashMenuItems,
   SuggestionMenuController,
 } from '@blocknote/react';
-import { RiAlertFill, RiCheckboxMultipleLine } from 'react-icons/ri';
 import { schema } from './App';
-
-// Slash menu item to insert an Alert block
-const insertAlert = (editor: typeof schema.BlockNoteEditor) => ({
-  title: 'Alert',
-  onItemClick: () => {
-    insertOrUpdateBlock(editor, {
-      type: 'alert',
-    });
-  },
-  aliases: [
-    'alert',
-    'notification',
-    'emphasize',
-    'warning',
-    'error',
-    'info',
-    'success',
-  ],
-  group: 'Other',
-  icon: <RiAlertFill />,
-});
-
-// Slash menu item to insert a MultipleChoice block
-const insertMultipleChoice = (
-  editor: typeof schema.BlockNoteEditor,
-) => ({
-  title: 'Multiple Choice',
-  onItemClick: () => {
-    insertOrUpdateBlock(editor, {
-      type: 'multipleChoice',
-    });
-  },
-  aliases: ['multipleChoice'],
-  group: 'Question Type',
-  icon: <RiCheckboxMultipleLine />,
-});
-
-// Function which gets all users for the mentions menu.
-const getMentionMenuItems = (
-  editor: typeof schema.BlockNoteEditor,
-): DefaultReactSuggestionItem[] => {
-  const users = ['Steve', 'Bob', 'Joe', 'Mike'];
-
-  return users.map(user => ({
-    title: user,
-    onItemClick: () => {
-      editor.insertInlineContent([
-        {
-          type: 'mention',
-          props: {
-            user,
-          },
-        },
-        ' ', // add a space after the mention
-      ]);
-    },
-  }));
-};
+import { insertAlert } from './components/Alert/insertAlert';
+import { getMentionMenuItems } from './components/Mention/getMentionMenuItem';
+import { insertMultipleChoice } from './components/MultipleChoice/insertMultipleChoice';
 
 function Editor({
   editor,
