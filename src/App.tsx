@@ -2,7 +2,15 @@ import '@blocknote/core/fonts/inter.css';
 import '@blocknote/mantine/style.css';
 import './App.css';
 
-import { BlockNoteEditor, PartialBlock } from '@blocknote/core';
+import {
+  BlockNoteEditor,
+  PartialBlock,
+  locales,
+} from '@blocknote/core';
+import {
+  multiColumnDropCursor,
+  locales as multiColumnLocales,
+} from '@blocknote/xl-multi-column';
 import pretty from 'pretty';
 import { useEffect, useMemo, useState } from 'react';
 import Editor from './Editor';
@@ -36,7 +44,18 @@ function App() {
     if (initialContent === 'loading') {
       return undefined;
     }
-    return BlockNoteEditor.create({ schema, initialContent });
+    return BlockNoteEditor.create({
+      schema,
+      // The default drop cursor only shows up above and below blocks - we replace
+      // it with the multi-column one that also shows up on the sides of blocks.
+      dropCursor: multiColumnDropCursor,
+      // Merges the default dictionary with the multi-column dictionary.
+      dictionary: {
+        ...locales.en,
+        multi_column: multiColumnLocales.en,
+      },
+      initialContent,
+    });
   }, [initialContent]);
 
   // @ts-expect-error Testing

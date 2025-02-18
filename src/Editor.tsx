@@ -1,9 +1,13 @@
-import { filterSuggestionItems } from '@blocknote/core';
+import {
+  combineByGroup,
+  filterSuggestionItems,
+} from '@blocknote/core';
 import { BlockNoteView } from '@blocknote/mantine';
 import {
   getDefaultReactSlashMenuItems,
   SuggestionMenuController,
 } from '@blocknote/react';
+import { getMultiColumnSlashMenuItems } from '@blocknote/xl-multi-column';
 import { insertAlert } from './components/Alert/insertAlert';
 import { getMentionMenuItems } from './components/Mention/getMentionMenuItem';
 import { insertMultipleChoice } from './components/MultipleChoice/insertMultipleChoice';
@@ -31,7 +35,10 @@ function Editor({
         getItems={async query =>
           filterSuggestionItems(
             [
-              ...getDefaultReactSlashMenuItems(editor),
+              ...combineByGroup(
+                getDefaultReactSlashMenuItems(editor),
+                getMultiColumnSlashMenuItems(editor),
+              ),
               insertAlert(editor),
               insertMultipleChoice(editor),
             ],
