@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { schema } from './App';
+import { schema } from './schema';
 
 function Sidebar({
   blocks,
