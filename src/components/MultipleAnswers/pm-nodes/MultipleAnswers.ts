@@ -2,36 +2,54 @@ import { createStronglyTypedTiptapNode } from '@blocknote/core';
 
 export const MultipleAnswers = createStronglyTypedTiptapNode({
   name: 'multipleAnswers',
-  group: 'childContainer bnBlock blockGroupChild',
-  content: 'option+', // one or more options
+  group: 'block',
+  content: 'blockContainer+',
   priority: 40,
   defining: true,
+
+  addAttributes() {
+    return {
+      question: {
+        default: '',
+        parseHTML: element =>
+          element.getAttribute('data-question') || '',
+        renderHTML: attributes => ({
+          'data-question': attributes.question,
+        }),
+      },
+    };
+  },
 
   parseHTML() {
     return [
       {
-        tag: 'div',
+        tag: 'div[data-type="multiple-answers"]',
         getAttrs: element => {
           if (typeof element === 'string') {
             return false;
           }
 
-          if (element.getAttribute('data-node-type') === this.name) {
-            return {};
-          }
-
-          return false;
+          return {
+            question: element.getAttribute('data-question') || '',
+          };
         },
       },
     ];
   },
 
-  renderHTML({ HTMLAttributes }) {
+  renderHTML({ HTMLAttributes, node }) {
     const container = document.createElement('div');
     container.className = 'bn-block-multiple-answers';
-    container.setAttribute('data-node-type', this.name);
+    container.setAttribute('data-type', 'multiple-answers');
+    container.setAttribute(
+      'data-question',
+      node.attrs.question || '',
+    );
+
     for (const [attribute, value] of Object.entries(HTMLAttributes)) {
-      container.setAttribute(attribute, value as string);
+      if (attribute !== 'data-question') {
+        container.setAttribute(attribute, value as string);
+      }
     }
 
     return {

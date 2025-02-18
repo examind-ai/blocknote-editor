@@ -23,20 +23,16 @@ export const Option = createStronglyTypedTiptapNode({
   parseHTML() {
     return [
       {
-        tag: 'div',
+        tag: 'div[data-type="option"]',
         getAttrs: element => {
           if (typeof element === 'string') {
             return false;
           }
 
-          if (element.getAttribute('data-node-type') === this.name) {
-            return {
-              isCorrect:
-                element.getAttribute('data-correct') === 'true',
-            };
-          }
-
-          return false;
+          return {
+            isCorrect:
+              element.getAttribute('data-correct') === 'true',
+          };
         },
       },
     ];
@@ -45,14 +41,16 @@ export const Option = createStronglyTypedTiptapNode({
   renderHTML({ HTMLAttributes, node }) {
     const container = document.createElement('div');
     container.className = 'bn-block-option';
-    container.setAttribute('data-node-type', this.name);
+    container.setAttribute('data-type', 'option');
     container.setAttribute(
       'data-correct',
       String(node.attrs.isCorrect),
     );
 
     for (const [attribute, value] of Object.entries(HTMLAttributes)) {
-      container.setAttribute(attribute, value as string);
+      if (attribute !== 'data-correct') {
+        container.setAttribute(attribute, value as string);
+      }
     }
 
     return {

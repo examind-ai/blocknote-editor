@@ -1,10 +1,14 @@
+import { defaultProps } from '@blocknote/core';
 import { createReactBlockSpec } from '@blocknote/react';
 
-export const OptionBlock = createReactBlockSpec(
+export const OptionReactComponent = createReactBlockSpec(
   {
     type: 'option',
     content: 'inline', // This block will have rich text content
     propSchema: {
+      textAlignment: defaultProps.textAlignment,
+      textColor: defaultProps.textColor,
+      backgroundColor: defaultProps.backgroundColor,
       isCorrect: {
         default: false,
       },

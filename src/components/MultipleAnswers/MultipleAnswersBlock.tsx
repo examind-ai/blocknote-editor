@@ -1,55 +1,38 @@
-import { BlockNoteEditor, PartialBlock } from '@blocknote/core';
+import { defaultProps } from '@blocknote/core';
 import { createReactBlockSpec } from '@blocknote/react';
 import './styles.css';
 
-// Define the block types we're working with
-interface MultipleAnswersBlockType {
-  type: 'multipleAnswers';
-  props: {
-    question: string;
-  };
-}
-
-interface OptionBlockType {
-  type: 'option';
-  props: {
-    isCorrect: boolean;
-  };
-}
-
-type EditorWithBlocks = BlockNoteEditor<
-  Record<'multipleAnswers' | 'option', any>,
-  any,
-  any
->;
-
-export const MultipleAnswersBlock = createReactBlockSpec(
+export const MultipleAnswersReactComponent = createReactBlockSpec(
   {
     type: 'multipleAnswers',
     content: 'none',
     propSchema: {
+      textAlignment: defaultProps.textAlignment,
+      textColor: defaultProps.textColor,
+      backgroundColor: defaultProps.backgroundColor,
       question: {
         default: '',
-        values: undefined,
       },
     },
   },
   {
-    render: ({ block, editor }) => {
-      const typedEditor = editor as EditorWithBlocks;
-
+    render: ({ block, editor, contentRef }) => {
       const addOption = () => {
         const lastOption =
           block.children?.[block.children.length - 1];
-        const newOption: PartialBlock = {
-          type: 'option',
-          props: {
-            isCorrect: false,
-          },
-        };
 
-        typedEditor.insertBlocks(
-          [newOption],
+        editor.insertBlocks(
+          [
+            {
+              type: 'option',
+              props: {
+                textAlignment: defaultProps.textAlignment.default,
+                textColor: defaultProps.textColor.default,
+                backgroundColor: defaultProps.backgroundColor.default,
+                isCorrect: false,
+              },
+            } as any,
+          ],
           lastOption || block,
           lastOption ? 'after' : 'before',
         );
@@ -63,7 +46,7 @@ export const MultipleAnswersBlock = createReactBlockSpec(
               type="text"
               value={block.props.question}
               onChange={e =>
-                typedEditor.updateBlock(block, {
+                editor.updateBlock(block, {
                   props: { ...block.props, question: e.target.value },
                 })
               }
@@ -75,16 +58,7 @@ export const MultipleAnswersBlock = createReactBlockSpec(
           <div className="options-container">
             {block.children?.map(optionBlock => (
               <div key={optionBlock.id} className="option-wrapper">
-                <div
-                  ref={el => {
-                    if (el) {
-                      const blockEl =
-                        typedEditor.createBlockElement(optionBlock);
-                      el.innerHTML = '';
-                      el.appendChild(blockEl);
-                    }
-                  }}
-                />
+                <div className="option-content" ref={contentRef} />
               </div>
             ))}
           </div>
